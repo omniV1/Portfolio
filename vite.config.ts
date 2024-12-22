@@ -1,21 +1,27 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 5173,
-    open: true,
-  },
   build: {
     outDir: 'dist',
     sourcemap: false,
-    chunkSizeWarningLimit: 1600,
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-      },
+        manualChunks: undefined
+      }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
   },
-  base: './'
+  base: '/',
+  server: {
+    port: 5173,
+    strictPort: true,
+    host: true
+  }
 })

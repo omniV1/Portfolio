@@ -7,15 +7,18 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Serve static files from the dist directory
+// Serve static files from the React app build directory
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Handle React routing, return all requests to React app
-app.get('*', function(req, res) {
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+  console.log('Current directory:', __dirname);
+  console.log('Static directory:', path.join(__dirname, 'dist'));
 });
