@@ -4,22 +4,20 @@ import ContactSection from './components/ContactSection'
 
 function App() {
   return (
-    <div className="bg-slate-900">
-      {/* Hero Section */}
-      <section id="home">
-        <Hero />
-      </section>
+   
+<div className="bg-slate-900">
+  <section id="home" className="relative w-full">
+    <Hero />
+  </section>
 
-      {/* Projects Section */}
-      <section id="projects">
-        <ProjectsSection />
-      </section>
+  <section id="projects" className="relative w-full">
+    <ProjectsSection />
+  </section>
 
-      {/* Contact Section */}
-      <section id="contact">
-        <ContactSection />
-      </section>
-    </div>
+  <section id="contact" className="relative w-full">
+    <ContactSection />
+  </section>
+</div>
   )
 }
 

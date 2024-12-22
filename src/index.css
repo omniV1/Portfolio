@@ -16,4 +16,16 @@
 
 html {
   scroll-behavior: smooth;
+  /* Add these properties for better mobile handling */
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  position: relative;
+  height: 100%;
+  /* Keep your existing body styles */
+  @apply bg-slate-900;
 }
