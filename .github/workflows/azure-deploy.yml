@@ -25,7 +25,7 @@ jobs:
 
       - name: Copy deployment files
         run: |
-          cp server.js dist/
+          cp src/server.js dist/
           cp package.json dist/
           cd dist
           npm install --production
