@@ -1,27 +1,13 @@
-import { FC, useState } from 'react';
-import { z } from 'zod';
+import { FC, useState, useRef, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-// Email validation schema
-const contactSchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email(),
-  message: z.string().min(10).max(1000),
-  subject: z.string().min(2).max(200),
-  honeypot: z.string().max(0), // Should always be empty - spam protection
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
 const ContactSection: FC = () => {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    honeypot: '', // Hidden field to catch bots
-  });
+  useEffect(() => {
+    emailjs.init('0bBoaq677OSmJjROF');
+  }, []);
 
+  const form = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -47,43 +33,26 @@ const ContactSection: FC = () => {
       return;
     }
 
-    // Validate form data
-    try {
-      contactSchema.parse(formData);
-    } catch (error) {
-      setStatus('error');
-      setErrorMessage('Please check your inputs and try again.');
-      return;
-    }
-
-    // If honeypot field is filled, silently reject (bot submission)
-    if (formData.honeypot) {
-      setStatus('success'); // Fake success to not alert bots
-      return;
-    }
+    if (!form.current) return;
 
     setStatus('loading');
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          captchaToken,
-        }),
-      });
+      const result = await emailjs.sendForm(
+        'service_0h2zx0c',
+        'template_seqbqzd',
+        form.current,
+        '0bBoaq677OSmJjROF'
+      );
 
-      if (!response.ok) {
+      if (result.text === 'OK') {
+        setStatus('success');
+        form.current.reset();
+        setCaptchaToken(null);
+        setLastSubmission(new Date());
+      } else {
         throw new Error('Failed to send message');
       }
-
-      setStatus('success');
-      setFormData({ name: '', email: '', subject: '', message: '', honeypot: '' });
-      setCaptchaToken(null);
-      setLastSubmission(new Date());
     } catch (error) {
       setStatus('error');
       setErrorMessage('Failed to send message. Please try again later.');
@@ -101,44 +70,30 @@ const ContactSection: FC = () => {
           Have a question or want to work together? Feel free to reach out!
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Hidden honeypot field */}
-          <div className="hidden">
-            <input
-              type="text"
-              name="honeypot"
-              value={formData.honeypot}
-              onChange={(e) => setFormData(prev => ({ ...prev, honeypot: e.target.value }))}
-            />
-          </div>
-
+        <form ref={form} onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-white">
+            <label htmlFor="user_name" className="block text-sm font-medium text-white">
               Name
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
+              id="user_name"
+              name="user_name"
               required
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
               className="mt-1 block w-full rounded-md bg-slate-800 border border-slate-700 
                        text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white">
+            <label htmlFor="user_email" className="block text-sm font-medium text-white">
               Email
             </label>
             <input
               type="email"
-              id="email"
-              name="email"
+              id="user_email"
+              name="user_email"
               required
-              value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
               className="mt-1 block w-full rounded-md bg-slate-800 border border-slate-700 
                        text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -153,8 +108,6 @@ const ContactSection: FC = () => {
               id="subject"
               name="subject"
               required
-              value={formData.subject}
-              onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
               className="mt-1 block w-full rounded-md bg-slate-800 border border-slate-700 
                        text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -169,8 +122,6 @@ const ContactSection: FC = () => {
               name="message"
               required
               rows={5}
-              value={formData.message}
-              onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
               className="mt-1 block w-full rounded-md bg-slate-800 border border-slate-700 
                        text-white px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -178,7 +129,7 @@ const ContactSection: FC = () => {
 
           <div className="flex justify-center">
             <ReCAPTCHA
-              sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY || ''}
+              sitekey="6LcRpqIqAAAAAJJheAdwOa_ytjdt3ZGL7TDcD8wZ"
               onChange={(token) => setCaptchaToken(token)}
               theme="dark"
             />

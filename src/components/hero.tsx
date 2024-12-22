@@ -46,7 +46,6 @@ const Hero = () => {
                 GCU Senior
               </p>
             </div>
-
             <div className="backdrop-blur-md bg-white/10 rounded-xl p-6 shadow-lg border border-white/10 hover:border-white/20 transition-all duration-300">
               <h3 className="text-white font-semibold text-lg mb-3">Family Life</h3>
               <p className="text-blue-100">
