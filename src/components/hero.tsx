@@ -1,6 +1,16 @@
 const Hero = () => {
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const scrollToProjects = () => {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -61,12 +71,16 @@ const Hero = () => {
               onClick={scrollToProjects}
               className="px-8 py-4 bg-white text-blue-700 rounded-lg font-semibold 
                        hover:bg-blue-50 transform hover:-translate-y-0.5 transition-all duration-200 
-                       shadow-lg hover:shadow-xl">
+                       shadow-lg hover:shadow-xl"
+            >
               View Projects
             </button>
-            <button className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold 
-                           hover:bg-white/10 transform hover:-translate-y-0.5 transition-all duration-200
-                           shadow-lg hover:shadow-xl">
+            <button 
+              onClick={scrollToContact}
+              className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold 
+                       hover:bg-white/10 transform hover:-translate-y-0.5 transition-all duration-200
+                       shadow-lg hover:shadow-xl"
+            >
               Contact Me
             </button>
           </div>
