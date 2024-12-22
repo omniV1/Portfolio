@@ -23,12 +23,19 @@ jobs:
           npm install
           npm run build
 
-      - name: Copy deployment files
+      - name: Prepare deployment package
         run: |
-          cp src/server.js dist/
-          cp package.json dist/
+          # Copy server and package files
+          cp src/server.js ./dist/
+          cp package.json ./dist/
+          
+          # Install production dependencies in dist
           cd dist
-          npm install --production
+          npm install --production --force
+          
+          # Debug - list contents
+          echo "Contents of dist directory:"
+          ls -la
 
       - name: Zip artifact for deployment
         run: |
@@ -54,8 +61,18 @@ jobs:
         with:
           name: node-app
 
+      - name: Debug - Check downloaded artifact
+        run: |
+          ls -la
+          unzip -l release.zip
+
       - name: Unzip artifact for deployment
         run: unzip release.zip -d app
+
+      - name: Debug - Check unzipped contents
+        run: |
+          echo "Contents of app directory:"
+          ls -la app/
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
