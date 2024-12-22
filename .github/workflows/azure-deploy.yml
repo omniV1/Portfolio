@@ -23,11 +23,11 @@ jobs:
           npm install
           npm run build
 
-      # Create web.config file directly in the dist folder
+      # Create web.config file with exact matching configuration
       - name: Create web.config
         run: |
           cat > dist/web.config << 'EOL'
-          <?xml version="1.0" encoding="UTF-8"?>
+          <?xml version="1.0"?>
           <configuration>
             <system.webServer>
               <rewrite>
@@ -37,24 +37,18 @@ jobs:
                     <conditions logicalGrouping="MatchAll">
                       <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
                       <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                      <add input="{REQUEST_URI}" pattern="^/(api)" negate="true" />
                     </conditions>
-                    <action type="Rewrite" url="/index.html" />
+                    <action type="Rewrite" url="/" />
                   </rule>
                 </rules>
               </rewrite>
               <staticContent>
-                <remove fileExtension=".js" />
-                <remove fileExtension=".jsx" />
-                <remove fileExtension=".json" />
-                <remove fileExtension=".css" />
-                <remove fileExtension=".svg" />
                 <mimeMap fileExtension=".js" mimeType="application/javascript" />
-                <mimeMap fileExtension=".jsx" mimeType="application/javascript" />
                 <mimeMap fileExtension=".json" mimeType="application/json" />
                 <mimeMap fileExtension=".css" mimeType="text/css" />
                 <mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
               </staticContent>
-              <httpErrors errorMode="DetailedLocalOnly" existingResponse="Auto" />
             </system.webServer>
           </configuration>
           EOL
