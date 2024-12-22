@@ -18,27 +18,17 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Debug - Show directory structure
-        run: |
-          echo "Current directory:"
-          pwd
-          echo "Directory contents:"
-          ls -la
-          echo "Public directory contents:"
-          ls -la public/
-
       - name: Install dependencies and build
         run: |
           npm install
           npm run build
 
-      # Copy web.config using full path
-      - name: Copy web.config
+      - name: Copy deployment files
         run: |
-          echo "Copying web.config from public to dist..."
-          cp ./public/web.config ./dist/
-          echo "Verifying copy operation..."
-          ls -la ./dist/web.config
+          cp server.js dist/
+          cp package.json dist/
+          cd dist
+          npm install --production
 
       - name: Zip artifact for deployment
         run: |
