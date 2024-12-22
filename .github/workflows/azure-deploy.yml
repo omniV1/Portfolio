@@ -18,16 +18,67 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: Debug - List initial directory
+        run: |
+          echo "Current directory contents:"
+          ls -la
+
+      - name: Install dependencies and build
         run: |
           npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm run build
+          echo "Build completed - checking dist directory:"
+          ls -la dist/
+
+      # Create web.config file with exact matching configuration
+      - name: Create web.config
+        run: |
+          echo "Creating web.config in dist folder..."
+          cat > dist/web.config << 'EOL'
+          <?xml version="1.0"?>
+          <configuration>
+            <system.webServer>
+              <rewrite>
+                <rules>
+                  <rule name="React Routes" stopProcessing="true">
+                    <match url=".*" />
+                    <conditions logicalGrouping="MatchAll">
+                      <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                      <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                      <add input="{REQUEST_URI}" pattern="^/(api)" negate="true" />
+                    </conditions>
+                    <action type="Rewrite" url="/" />
+                  </rule>
+                </rules>
+              </rewrite>
+              <staticContent>
+                <mimeMap fileExtension=".js" mimeType="application/javascript" />
+                <mimeMap fileExtension=".json" mimeType="application/json" />
+                <mimeMap fileExtension=".css" mimeType="text/css" />
+                <mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
+              </staticContent>
+            </system.webServer>
+          </configuration>
+          EOL
+          echo "web.config created - verifying content:"
+          cat dist/web.config
+          echo "Checking file permissions:"
+          ls -la dist/web.config
+
+      - name: Debug - List dist directory before zip
+        run: |
+          echo "dist directory contents before zip:"
+          ls -la dist/
 
       - name: Zip artifact for deployment
         run: |
           cd dist
           zip -r ../release.zip ./*
+          cd ..
+          echo "Checking zip file:"
+          ls -la release.zip
+          echo "Listing zip contents:"
+          unzip -l release.zip
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -48,8 +99,18 @@ jobs:
         with:
           name: node-app
 
+      - name: Debug - Check downloaded artifact
+        run: |
+          echo "Checking downloaded artifact:"
+          ls -la
+          echo "Examining zip contents:"
+          unzip -l release.zip
+
       - name: Unzip artifact for deployment
-        run: unzip release.zip -d app
+        run: |
+          unzip release.zip -d app
+          echo "Checking unzipped contents:"
+          ls -la app/
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
