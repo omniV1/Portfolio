@@ -1,6 +1,6 @@
 import Hero from './components/hero'
 import ProjectsSection from './components/ProjectSection'
-
+import ContactSection from './components/ContactSection'
 
 function App() {
   return (
@@ -13,6 +13,11 @@ function App() {
       {/* Projects Section */}
       <section id="projects">
         <ProjectsSection />
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact">
+        <ContactSection />
       </section>
     </div>
   )
