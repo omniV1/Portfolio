@@ -1,21 +1,21 @@
 const Hero = () => {
-
   const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      // Get the section's position relative to the viewport
-      const sectionTop = section.getBoundingClientRect().top;
-      // Get current scroll position
-      const scrollPosition = window.pageYOffset;
-      // Calculate target position
-      const targetPosition = scrollPosition + sectionTop;
-  
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }
+    // Add a small delay to ensure DOM is ready
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const headerOffset = 60; // Adjust this value based on your layout
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }, 100);
   };
+
   
 
   return (
@@ -70,27 +70,26 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row justify-center gap-6 mt-12">
-          <button 
-  onClick={() => scrollToSection('projects')}
-  className="px-8 py-4 bg-white text-blue-700 rounded-lg font-semibold 
-           hover:bg-blue-50 transform hover:-translate-y-0.5 transition-all duration-200 
-           shadow-lg hover:shadow-xl"
->
-  View Projects
-</button>
-
-<button 
-  onClick={() => scrollToSection('contact')}
-  className="px-8 py-4 border-2 border-white text-white rounded-lg font-semibold 
-           hover:bg-white/10 transform hover:-translate-y-0.5 transition-all duration-200
-           shadow-lg hover:shadow-xl"
->
-  Contact Me
-</button>
-          </div>
-        </div>
+            {/* CTA Buttons */}
+      <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8 px-4">
+        <button 
+          onClick={() => scrollToSection('projects')}
+          className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 bg-white text-blue-700 rounded-lg font-semibold 
+                   hover:bg-blue-50 transform hover:-translate-y-0.5 transition-all duration-200 
+                   shadow-lg hover:shadow-xl text-base md:text-lg"
+        >
+          View Projects
+        </button>
+        <button 
+          onClick={() => scrollToSection('contact')}
+          className="w-full sm:w-auto px-6 py-3 md:px-8 md:py-4 border-2 border-white text-white rounded-lg font-semibold 
+                   hover:bg-white/10 transform hover:-translate-y-0.5 transition-all duration-200
+                   shadow-lg hover:shadow-xl text-base md:text-lg"
+        >
+          Contact Me
+        </button>
+      </div>
+    </div>
       </div>
     </div>
   );

@@ -16,16 +16,15 @@
 
 html {
   scroll-behavior: smooth;
-  /* Add these properties for better mobile handling */
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  height: 100%;
+  scroll-padding-top: 60px; /* Adjust this value based on your layout */
 }
 
+/* Fix for iOS momentum scrolling */
 body {
-  overflow-x: hidden;
-  position: relative;
-  height: 100%;
-  /* Keep your existing body styles */
-  @apply bg-slate-900;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional: Add snap scrolling for smoother section transitions */
+.snap-start {
+  scroll-snap-align: start;
 }
