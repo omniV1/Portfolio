@@ -7,7 +7,7 @@ Air Force veteran with 5 years of aircraft maintenance experience on F-22 Raptor
 
 ## EDUCATION
 **Bachelor of Science in Software Development**, Grand Canyon University  
-*Graduation: December 2025* | GPA: 3.05
+*Graduation: December 2025* | GPA: 3.17
 
 **Relevant Coursework:**
 - Programming in C#, Java, and JavaScript
