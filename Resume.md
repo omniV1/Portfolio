@@ -1,6 +1,6 @@
 # OWEN LINDSEY  
 Phoenix, AZ Area | owen.lindsey98@outlook.com | 480-201-7558  
-[GitHub Portfolio](https://github.com/omniV1/Portfolio/new/main) | [LinkedIn Profile](#)
+[GitHub Portfolio](https://github.com/omniV1) | [LinkedIn Profile](https://www.linkedin.com/in/owen-lindsey-5b323a23b)
 
 ## PROFESSIONAL SUMMARY
 Dedicated Air Force veteran with 5 years of aircraft maintenance experience on F-22 Raptors, transitioning to software development. Proven ability to quickly learn new technologies and build complex systems that address real-world challenges. Experienced in developing full-stack applications with a focus on user-centric design and practical implementations.
